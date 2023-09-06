@@ -8,6 +8,19 @@ To monitor your bots, navigate to the Bot resource page at https://app.medplum.c
 
 Choose which bot's events you would like to view and click on that it, bringing you to the bot resource page.
 
-From this page, navigate to the `Event` tab. This tab will display all of the `AuditEvent` resources associated with the current bot. These events represent every time the bot has been run or triggered.
+From this page, navigate to the `Event` tab. This tab will display all of the `AuditEvent` resources associated with the current bot. These events represent every time the bot has been run or triggered. This page display the outcomes from the bot, including anything that is printed to the console as part of the bot's functionality.
 
-On the Event tab, there are four fields: ID, Outcome, Outcome Description, and Last Updated.
+On the Event tab, there are four fields: ID, Outcome, Outcome Desc, and Last Updated. The Id field is the id of the `AuditEvent`, _not_ the bot.
+
+The Outcome field represents the result of the event (i.e. success, failure, etc.).
+
+| Code | Display         | Description                                                                                             |
+| ---- | --------------- | ------------------------------------------------------------------------------------------------------- |
+| `0`  | Success         | The bot ran successfully, though there may have been warnings.                                          |
+| `4`  | Minor failure   | The bot was not able to complete due to a minor failure (often similar to an HTTP 400 response).        |
+| `8`  | Serious Failure | The bot was not able to complete due to a more serious failure (often similar to an HTTP 500 response). |
+| `12` | Major failure   | The bot failed with a major error and the system is no longer available for use.                        |
+
+The Outcome Desc is a description of the results of the bot. This includes anything that was logged to the console by the bot.
+
+The Last Updated field represents the last time the `AuditEvent` was changed, and will likely be the time the bot finished running.
