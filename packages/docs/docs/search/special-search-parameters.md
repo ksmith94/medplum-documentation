@@ -216,3 +216,11 @@ Similar to the `_tag` parameter, `_profile` allows you to search on the resource
     </TabItem>
   </Tabs>
 </details>
+
+## _filter
+
+The `_filter` parameter can be used to filter for more complex queries. For more details see the [_filter Search Parameter docs](/docs/search/filter-search-parameter).
+
+## _sort
+
+The `_sort` parameter allows you to sort the results of your search. For details on how to use the `_sort` parameter, see the [Sorting the Results docs](/docs/search/basic-search#sorting-the-results).
