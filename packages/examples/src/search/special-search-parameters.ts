@@ -52,7 +52,7 @@ await medplum.searchResources('Patient', {
 
 /*
 // start-block summaryCli
-medplum get Patient?_id=homer-simpson&_summary=true
+medplum get 'Patient?_id=homer-simpson&_summary=true'
 // end-block summaryCli
 
 // start-block summaryCurl
@@ -184,7 +184,7 @@ curl 'https://api.medplum.com/fhir/R4/Patient?_total=estimate' \
 
 // start-block profileTs
 await medplum.searchResources('Observation', {
-  _profile: 'https://example.org/StructureDefinition/pediatric-growth-chart'
+  _profile: 'https://example.org/StructureDefinition/pediatric-growth-chart',
 });
 // end-block profileTs
 
@@ -198,6 +198,24 @@ curl 'https://api.medplum.com/fhir/R4/Observation?_profile=https://example.org/S
 	-H 'authorization: Bearer $ACCESS_TOKEN' \
   -H 'content-type: application/fhir+json' \ 
 // end-block profileCurl
+*/
+
+// start-block compartmentTs
+await medplum.searchResources('Communication', {
+  _compartment: 'Patient/homer-simpson',
+})
+// end-block compartmentTs
+
+/*
+// start-block compartmentCli
+medplum get 'Communication?_compartment=Patient/homer-simpson'
+// end-block compartmentCli
+
+// start-block compartmentCurl
+curl 'https://api.medplum.com/fhir/R4/Communication?_compartment=Patient/homer-simpson' \
+	-H 'authorization: Bearer $ACCESS_TOKEN' \
+  -H 'content-type: application/fhir+json' \ 
+// end-block compartmentCurl
 */
 
 console.log(summaryResponse, elementsResponse);

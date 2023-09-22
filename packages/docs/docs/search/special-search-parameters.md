@@ -157,7 +157,33 @@ The `_tag` parameter allows you to search on the `tag` field of the `meta` eleme
   </Tabs>
 </details>
 
-## Compartments
+## _compartment
+
+A compartment is a grouping of resources which share a common relation. For example, each `Patient` resource has its own compartment. A `Patient` compartment includes any resources which have reference that `Patient`, usually in the `subject` field.
+
+Medplum allows you to easily search using compartments by providing the non-standard `_compartment` parameter. This enables you to find all resources of a given type that are associated with a certain compartment. 
+
+Using `_compartment` can be especially helpful when searching for `Communication` resources by or about a `Patient`. `Communication` resources are part of a compartment if the patient is the `sender`, `recipient`, or `subject` of the message. Searching by compartments allows you to handle all of these in one search, rather than splitting it into three searches or using a complex filter expression.
+
+<details><summary>Example: Find all communications for a patient</summary>
+  <Tabs groupId="language">
+    <TabItem value="ts" label="Typescript">
+      <MedplumCodeBlock language="ts" selectBlocks="compartmentTs">
+        {ExampleCode}
+      </MedplumCodeBlock>
+    </TabItem>
+    <TabItem value="cli" label="CLI">
+      <MedplumCodeBlock language="bash" selectBlocks="compartmentCli">
+        {ExampleCode}
+      </MedplumCodeBlock>
+    </TabItem>
+    <TabItem value="curl" label="cURL">
+      <MedplumCodeBlock language="bash" selectBlocks="compartmentCurl">
+        {ExampleCode}
+      </MedplumCodeBlock>
+    </TabItem>
+  </Tabs>
+</details>
 
 ## _total
 
