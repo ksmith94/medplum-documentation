@@ -1,6 +1,6 @@
 // start-block imports
 import { MedplumClient } from '@medplum/core';
-import { Patient } from '@medplum/fhirtypes';
+import { Observation, Patient } from '@medplum/fhirtypes';
 
 // end-block imports
 
@@ -103,45 +103,67 @@ const summaryResponse: Patient =
 // end-block summaryResponse
 
 // start-block elementsTs
-await medplum.searchResources('Patient', {
-  _elements: 'name,gender',
+await medplum.searchResources('Observation', {
+  _elements: 'status,code,subject,performer',
 });
 // end-block elementsTs
 
 /*
 // start-block elementsCli
-medplum get 'Patient?_elements=name,gender'
+medplum get 'Observation?_elements=status,code,subject,performer'
 // end-block elementsCli
 
 // start-block elementsCurl
-curl 'https://api.medplum.com/fhir/R4/Patient?_element=name,gender' \
+curl 'https://api.medplum.com/fhir/R4/Observations?_elements=status,code,subject,performer' \
 	-H 'authorization: Bearer $ACCESS_TOKEN' \
   -H 'content-type: application/fhir+json' \ 
 // end-block elementsCurl
 */
 
-const elementsResponse: Patient[] =
+const elementsResponse: Observation[] =
 // start-block elementsResponse
 [
   {
-    resourceType: 'Patient',
-    name: [
+    resourceType: 'Observation',
+    status: 'final',
+    code: {
+      coding: [
+        {
+          system: 'http://loinc.org',
+          code: '8867-4',
+          display: 'Heart Rate',
+        },
+      ],
+    },
+    subject: {
+      reference: 'Patient/homer-simpson',
+    },
+    performer: [
       {
-        family: 'Simpson',
-        given: ['Homer', 'Jay'],
+        reference: 'Practitioner/dr-alice-smith',
       },
     ],
-    gender: 'male',
   },
   {
-    resourceType: 'Patient',
-    name: [
+    resourceType: 'Observation',
+    status: 'preliminary',
+    code: {
+      coding: [
+        {
+          system: 'http://loinc.org',
+          code: '8310-5',
+          display: 'Body temperature',
+        },
+      ],
+    },
+    subject: {
+      reference: 'Patient/marge-simpson',
+    },
+    performer: [
       {
-        family: 'Simpson',
-        given: ['Marge', 'Jacqueline']
+        reference: 'Practitioner/dr-gregory-house',
       },
     ],
-    gender: 'female',
   },
 ];
 // end-block elementsResponse

@@ -4,7 +4,7 @@ import TabItem from '@theme/TabItem';
 
 import ExampleCode from '!!raw-loader!@site/..//examples/src/search/special-search-parameters.ts';
 
-# Special Search Parameters
+# Advanced Search Parameters
 
 The FHIR search framework allows for special search parameters that enable more complex searches to fine-tune your results. In this document, we will go over the following special parameters:
 
@@ -16,6 +16,8 @@ The FHIR search framework allows for special search parameters that enable more 
 - [compartments](#compartments)
 - [_total](#total)
 - [_profile](#profile)
+- [_filter](#filter)
+- [_sort](#sort)
 
 ## _id
 
@@ -43,7 +45,9 @@ The `_id` parameter allows you to search for any resource based on its `id` fiel
 
 ## _lastUpdated
 
-The `_lastUpdated` parameter allows you to search for resources based on when their most recent changes were. This is most useful when combined with comparision operators, such as `gt` (greater than) or `lt` (less than) to find resources that have or have not been changed since a certain time or date. 
+The `_lastUpdated` parameter allows you to search for resources based on when they were most recently changed. 
+
+This is especially useful when combined with comparision operators, such as `gt` (greater than) or `lt` (less than) to find resources that have or have not been changed since a certain time or date. 
 
 <details><summary>Example: Searching for threads that have not had any activity since the beginning of the year</summary>
   <Tabs groupId="language">
@@ -67,15 +71,17 @@ The `_lastUpdated` parameter allows you to search for resources based on when th
 
 ## _summary
 
-The `_summary` parameter allows you to return only a portion of a resources elements. It follows the below value set:
+The `_summary` parameter allows you to return only a portion of a resources elements. Its primary intent is to optimize your queries by fetching only essential information. It is particularly useful when searching for large resources such as those with images or repeating elements.
 
-| Value | Description                                                                                                        |
-| ----- | ------------------------------------------------------------------------------------------------------------------ |
-| true  | Only returns elements that are marked as `summary` in the resource definition.                                     |
-| text  | Returns the `text`, `id`, and `meta` elements, along with any top-level mandatory elements for the given resource. |
-| data  | Returns the `id`, `meta`, and any top-level mandatory elements for the given resource.                             |
-| count | Returns the count of matching resources, but none of the actual resource details for those matches.                |
-| false | Returns all of the elements for the resource. It does not return a summary.                                        |
+The `_summary` parameter can contain one of the following value set:
+
+| Value   | Description                                                                                                        |
+| ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `true`  | Only returns elements that are marked as `summary` in the resource definition.                                     |
+| `text`  | Returns the `text`, `id`, and `meta` elements, along with any top-level mandatory elements for the given resource. |
+| `data`  | Returns the `id`, `meta`, and any top-level mandatory elements for the given resource.                             |
+| `count` | Returns the count of matching resources, but none of the actual resource details for those matches.                |
+| `false` | Returns all of the elements for the resource. It does not return a summary.                                        |
 
 <details><summary>Example: Searching for a summary of a patient</summary>
   <Tabs groupId="language">
@@ -105,9 +111,13 @@ The `_summary` parameter allows you to return only a portion of a resources elem
 
 ## _elements
 
-The `_elements` parameter is similar to `_summary` in that it allows you to return only a subset of the resource's elements. However, rather than a predefined value set, `_elements` allows you to choose which fields you would like to return. The fields you choose should be formatted as a comma-separated list of base elements for a given resource. Note that any mandatory or modifier elements should always be included in the chosen list of elements. 
+The `_elements` parameter is similar to `_summary` in that it allows you to return only a subset of the resource's elements. However, rather than a predefined value set, `_elements` allows you to choose which fields you would like to return. 
 
-<details><summary>Example: Searching for a summary of a patient</summary>
+The fields you choose should be formatted as a comma-separated list of base elements for a given resource. 
+
+Note that any top-level mandatory or modifier elements should always be included in the chosen list of elements. Additionally, servers are not obligated to return only the elements requested and should always return all mandatory elements.
+
+<details><summary>Example: Searching the subject and performers of observations</summary>
   <Tabs groupId="language">
     <TabItem value="ts" label="Typescript">
       <MedplumCodeBlock language="ts" selectBlocks="elementsTs">
@@ -159,7 +169,7 @@ The `_tag` parameter allows you to search on the `tag` field of the `meta` eleme
 
 ## _compartment
 
-A compartment is a grouping of resources which share a common relation. For example, each `Patient` resource has its own compartment. A `Patient` compartment includes any resources which have reference that `Patient`, usually in the `subject` field.
+A compartment is a grouping of resources which share a common relation. For example, each `Patient` resource has its own compartment. A `Patient` compartment includes any resources which reference that `Patient`, usually in the `subject` field.
 
 Medplum allows you to easily search using compartments by providing the non-standard `_compartment` parameter. This enables you to find all resources of a given type that are associated with a certain compartment. 
 
@@ -187,13 +197,15 @@ Using `_compartment` can be especially helpful when searching for `Communication
 
 ## _total
 
-When searching in FHIR, a `Bundle` is returned, not the actual resource you searched for. On a `Bundle`, there is an `total` element, which indicates the total number of resources that match your search parameters. Providing the exact number of matching resources can be onerous on the server, so the `_total` parameter is provided to potentially assist with this. There are three options that you can provide for the `_total` parameter.
+When you search using FHIR, the server returns a `Bundle`, not the actual resources that you searched for. A `Bundle` contains a `total` element, which inddicates the total number of resources that match your search parameters.
+
+Since providing the exact number of matching resources can be onerous on the server, the `_total` parameter is provided to assist with this. There are three options that you can provide for the `_total` parameter: 
 
 | Value    | Description                                                                           |
 | -------- | ------------------------------------------------------------------------------------- |
-| none     | The `total` field will not be populated on the response `Bundle`.                     |
-| estimate | The response `Bundle` will have a rough estimate of the number of matching resources. |
 | accurate | The response `Bundle` will have the exact number of matching resources.               |
+| estimate | The response `Bundle` will have a rough estimate of the number of matching resources. |
+| none     | The `total` field will not be populated on the response `Bundle`.                     |
 
 :::note Note
 When searching in Medplum, the function `searchResources` is provided. This function unwraps the response bundle of your search results and returns an array of the resources that match your parameters. Since you will not receive a bundle, the `_total` parameter is not relevant when using this function.
@@ -249,4 +261,4 @@ The `_filter` parameter can be used to filter for more complex queries. For more
 
 ## _sort
 
-The `_sort` parameter allows you to sort the results of your search. For details on how to use the `_sort` parameter, see the [Sorting the Results docs](/docs/search/basic-search#sorting-the-results).
+The `_sort` parameter allows you to sort the results of your search based on different parameters. For details on how to use the `_sort` parameter, see the [Sorting the Results docs](/docs/search/basic-search#sorting-the-results).
