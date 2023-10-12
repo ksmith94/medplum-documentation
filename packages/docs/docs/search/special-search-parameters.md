@@ -199,7 +199,7 @@ Using `_compartment` can be especially helpful when searching for `Communication
 
 When you search using FHIR, the server returns a `Bundle`, not the actual resources that you searched for. A `Bundle` contains a `total` element, which inddicates the total number of resources that match your search parameters.
 
-Since providing the exact number of matching resources can be onerous on the server, the `_total` parameter is provided to assist with this. There are three options that you can provide for the `_total` parameter: 
+Since providing the exact number of matching resources can be onerous on the server, the `_total` parameter is provided to assist with this. If you do not include the `_total` parameter, the `total` field will not be populated. There are three options that you can provide for the `_total` parameter: 
 
 | Value    | Description                                                                           |
 | -------- | ------------------------------------------------------------------------------------- |
@@ -208,7 +208,7 @@ Since providing the exact number of matching resources can be onerous on the ser
 | none     | The `total` field will not be populated on the response `Bundle`.                     |
 
 :::note Note
-When searching in Medplum, the function `searchResources` is provided. This function unwraps the response bundle of your search results and returns an array of the resources that match your parameters. Since you will not receive a bundle, the `_total` parameter is not relevant when using this function.
+The Medplum SDK provides the `searchResources` helper function. This function unwraps the response bundle of you search results and returns an array of the resources that match your parameters. Since you will not receive a bundle, the `_total` parameter is not relevant when using this function.
 :::
 
 <details><summary>Example: Get an estimate of the number of patients in your organization</summary>

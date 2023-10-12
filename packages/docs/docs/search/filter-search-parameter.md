@@ -14,9 +14,9 @@ The syntax for the `_filter` parameter is different than for other search parame
 
 A filter expression has three parts: a `parameter`, an `operator`, and a `value`. 
 
-- The `parameter` is the field of the resource that you will filter by
-- The `operator` is the type of comparison you will make [(see below)](#comparison-operators)
-- The `value` is the criteria you want to compare against
+- The **parameter** is the field of the resource that you will filter by
+- The **operator** is the type of comparison you will make [(see below)](#comparison-operators)
+- The **value** is the criteria you want to compare against
 
 <details><summary>Example: Filter syntax</summary>
   <Tabs groupId="language">
@@ -38,7 +38,7 @@ A filter expression has three parts: a `parameter`, an `operator`, and a `value`
   </Tabs>
 </details>
 
-In this example, the filter expression is `name eq "simpson"`, where `name` is the `parameter`, `eq` is the `operator`, and `"simpson"` is the `value`. 
+In this example, the filter expression is `name eq "simpson"`, where `name` is the parameter, `eq` is the operator, and `"simpson"` is the value. 
 
 ## Comparison Operators
 
